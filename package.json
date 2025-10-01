@@ -1,0 +1,47 @@
+{
+  "name": "wagmi-friends",
+  "version": "1.0.0",
+  "description": "See which friends are locked in",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "build": {
+    "appId": "com.wagmi.friends",
+    "productName": "Wagmi Friends",
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "icon": "Template.png",
+      "target": "dmg"
+    },
+    "compression": "maximum",
+    "asar": true,
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    }
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0"
+  },
+  "devDependencies": {
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12"
+  }
+}
