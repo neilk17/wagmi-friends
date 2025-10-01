@@ -12,6 +12,7 @@ const CONFIG_FILE = path.join(app.getPath('userData'), 'user-config.json')
 // User data
 let myName = null
 let myId = null // Will be set after first insert
+let myStatus = "cooking" // Track current status locally
 
 let tray
 let supabase
@@ -70,6 +71,7 @@ function initSupabase() {
 
 // --- 🔹 Heartbeat ---
 async function heartbeat(status = "cooking") {
+    myStatus = status // Update local status immediately
     if (myId) {
         // Update existing user
         const { error } = await supabase.from('users').update({
@@ -115,11 +117,11 @@ async function refreshMenu() {
     const contextMenu = Menu.buildFromTemplate([
         { label: "Friends Online", enabled: false },
         ...friends.map(f => ({
-            label: `${f.name || 'User #' + f.id} (${f.status})`
+            label: `${f.name || 'User #' + f.id} (${f.id === myId ? myStatus : f.status})`
         })),
         { type: 'separator' },
-        { label: "Set me Cooking", click: () => heartbeat("cooking") },
-        { label: "Set me Idle", click: () => heartbeat("idle") },
+        { label: "Set me Cooking", click: async () => { await heartbeat("cooking"); await refreshMenu(); } },
+        { label: "Set me Idle", click: async () => { await heartbeat("idle"); await refreshMenu(); } },
         { type: 'separator' },
         { role: 'quit' }
     ])
