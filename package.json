@@ -1,6 +1,6 @@
 {
   "name": "wagmi-friends",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "See which friends are locked in",
   "main": "main.js",
   "scripts": {

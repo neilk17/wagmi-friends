@@ -141,6 +141,14 @@ app.whenReady().then(async () => {
     tray.setTitle("🍳") // Set emoji as title
     tray.setToolTip("Friends Status")
 
+    // Set initial menu immediately
+    const initialMenu = Menu.buildFromTemplate([
+        { label: "Loading...", enabled: false },
+        { type: 'separator' },
+        { role: 'quit' }
+    ])
+    tray.setContextMenu(initialMenu)
+
     // Check if user exists
     if (!loadUserConfig()) {
         // First time user - prompt for name
@@ -154,8 +162,10 @@ app.whenReady().then(async () => {
     }
 
     initSupabase()
-    heartbeat()
-    refreshMenu()
+
+    // Do network calls in background without blocking
+    heartbeat().catch(err => console.error("Initial heartbeat failed:", err))
+    refreshMenu().catch(err => console.error("Initial refresh failed:", err))
 
     // Heartbeat every 30 sec
     setInterval(() => heartbeat(), 30_000)
